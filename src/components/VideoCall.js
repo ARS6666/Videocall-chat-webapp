@@ -6,7 +6,7 @@ import '../assets/css/webcam.css';
 import '../assets/css/font/font.css';
 import bg from "../assets/media/bg.jpg"; // Ensure this path is correct
 
-const socket = io('http://localhost:5000'); // Replace with your server URL
+const socket = io('https://videochat.liara.run:5000'); // Replace with your server URL
 
 const App = () => {
     const [stream, setStream] = useState(null);
