@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import '../assets/css/chatroom.css';
 
-const socket = io('http://localhost:5000'); // Replace with your server URL
+const socket = io('https://videochat.liara.run:5000'); // Replace with your server URL
 
 const ChatRoom = () => {
     const [messages, setMessages] = useState([]);
