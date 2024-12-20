@@ -14,35 +14,43 @@ const io = socketIo(server, {
   }
 });
 
+let groups = {}; // To keep track of available groups
+
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
   socket.emit('yourID', socket.id);
 
+  // Send the list of groups to the newly connected user
+  socket.emit('groupList', Object.keys(groups));
+
   // Handle joining a group chat
-  socket.on('joinGroup', (groupID) => {
-    socket.join(groupID);
-    console.log(`${socket.id} joined group ${groupID}`);
+  socket.on('joinGroup', (groupName) => {
+    if (groups[groupName]) {
+      socket.join(groupName);
+      console.log(`${socket.id} joined group ${groupName}`);
+      socket.emit('groupJoined', groupName);
+    } else {
+      socket.emit('error', 'Group does not exist.');
+    }
   });
 
-  // Handle private calls
-  socket.on('callUser', (data) => {
-    io.to(data.userToCall).emit('callUser', { signal: data.signalData, from: data.from });
-  });
-
-  // Handle answering private calls
-  socket.on('answerCall', (data) => {
-    io.to(data.to).emit('callAccepted', data.signal);
-  });
-
-  // Handle private messages
-  socket.on('sendMessage', (data) => {
-    io.to(data.to).emit('receiveMessage', { name: data.name, message: data.message, from: socket.id });
+  // Handle creating a new group chat
+  socket.on('createGroup', (groupName) => {
+    if (!groups[groupName]) {
+      groups[groupName] = [];
+      io.emit('groupList', Object.keys(groups)); // Notify all users of the new group
+      socket.join(groupName);
+      socket.emit('groupCreated', groupName);
+      console.log(`Group ${groupName} created by ${socket.id}`);
+    } else {
+      socket.emit('error', 'Group name already taken.');
+    }
   });
 
   // Handle group messages
   socket.on('sendGroupMessage', (data) => {
-    io.to(data.groupID).emit('receiveGroupMessage', { name: data.name, message: data.message });
+    io.to(data.groupName).emit('receiveGroupMessage', { name: data.name, message: data.message });
   });
 
   socket.on('disconnect', () => {
