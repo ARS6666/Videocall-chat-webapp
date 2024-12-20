@@ -18,6 +18,11 @@ function Home() {
                                 <button className='btn btn-outline-light col-md-12'>Chat room</button>
                             </a>
                         </div>
+                        <div className='col-md-12 pt-2 d-flex justify-content-center'>
+                            <a href='/runserver' className='text dark col-md-12' style={{ textDecoration: "none" }}>
+                                <button className='btn btn-outline-light col-md-12'>Run Server</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

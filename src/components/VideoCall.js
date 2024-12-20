@@ -4,9 +4,9 @@ import io from 'socket.io-client';
 import SimplePeer from 'simple-peer';
 import '../assets/css/webcam.css';
 import '../assets/css/font/font.css';
-import bg from "../assets/media/bg.jpg"; // Ensure this path is correct
+import url from "../config.json"
 
-const socket = io('http://localhost:5000'); // Replace with your server URL
+const socket = io(url.baseurl); // Replace with your server URL
 
 const App = () => {
     const [stream, setStream] = useState(null);
