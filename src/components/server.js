@@ -17,6 +17,8 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
+  socket.emit('yourID', socket.id);
+
   socket.on('callUser', (data) => {
     console.log('Calling user:', data);
     io.to(data.userToCall).emit('callUser', { signal: data.signalData, from: data.from });
@@ -25,6 +27,10 @@ io.on('connection', (socket) => {
   socket.on('answerCall', (data) => {
     console.log('Answering call:', data);
     io.to(data.to).emit('callAccepted', data.signal);
+  });
+
+  socket.on('sendMessage', (data) => {
+    io.to(data.to).emit('receiveMessage', { message: data.message, from: socket.id });
   });
 
   socket.on('disconnect', () => {
