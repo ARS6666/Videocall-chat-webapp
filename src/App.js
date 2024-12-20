@@ -9,7 +9,7 @@ function App() {
     <Router>
       <Routes>
         <Route path='' element={<Home />} />
-        <Route path='/Chat' element={<Webcam />} />
+        <Route path='/webcam' element={<Webcam />} />
         <Route path='/chatroom' element={<Chat />} />
       </Routes>
     </Router>
