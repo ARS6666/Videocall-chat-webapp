@@ -19,18 +19,30 @@ io.on('connection', (socket) => {
 
   socket.emit('yourID', socket.id);
 
+  // Handle joining a group chat
+  socket.on('joinGroup', (groupID) => {
+    socket.join(groupID);
+    console.log(`${socket.id} joined group ${groupID}`);
+  });
+
+  // Handle private calls
   socket.on('callUser', (data) => {
-    console.log('Calling user:', data);
     io.to(data.userToCall).emit('callUser', { signal: data.signalData, from: data.from });
   });
 
+  // Handle answering private calls
   socket.on('answerCall', (data) => {
-    console.log('Answering call:', data);
     io.to(data.to).emit('callAccepted', data.signal);
   });
 
+  // Handle private messages
   socket.on('sendMessage', (data) => {
-    io.to(data.to).emit('receiveMessage', { message: data.message, from: socket.id });
+    io.to(data.to).emit('receiveMessage', { name: data.name, message: data.message, from: socket.id });
+  });
+
+  // Handle group messages
+  socket.on('sendGroupMessage', (data) => {
+    io.to(data.groupID).emit('receiveGroupMessage', { name: data.name, message: data.message });
   });
 
   socket.on('disconnect', () => {

@@ -6,7 +6,7 @@ import '../assets/css/webcam.css';
 import '../assets/css/font/font.css';
 import url from "../config.json"
 
-const socket = io(url.baseurl); // Replace with your server URL
+const socket = io(url.baseUrl); // Replace with your server URL
 
 const App = () => {
     const [stream, setStream] = useState(null);
